@@ -26,71 +26,85 @@ Setup Machine
 Install
 -------
 
-* We need
-    * [Java Runtime Environment](http://openjdk.java.net/install/)
-    * [Apache](https://help.ubuntu.com/lts/serverguide/httpd.html)
-    * [XVFB](http://www.x.org/archive/X11R7.6/doc/man/man1/Xvfb.1.xhtml)
-    * [Selenium](http://www.seleniumhq.org)
-    * [Firefox](https://support.mozilla.org/si/kb/Linux%20මත%20ෆයර්ෆොක්ස්%20ස්ථාපනය)
-    * [Chrome (Driver)](https://code.google.com/p/selenium/wiki/ChromeDriver)
+### [Java Runtime Environment](http://openjdk.java.net/install/)
 
-* Ubuntu
+Ubuntu
 
         cd && \
-        sudo apt-get update && \
-        sudo apt-get install openjdk-8-jre && \
-        sudo apt-get install apache2 && \
-        sudo apt-get install xvfb && \
-        mkdir selenium-server && cd selenium-server
+        sudo apt-get update -y && \
+        sudo apt-get install openjdk-8-jre -y
+
+Amazon Linux
+
+        cd && \
+        sudo yum update -y && \
+        sudo yum install java-1.8.0-openjdk -y
+
+### [Apache](https://help.ubuntu.com/lts/serverguide/httpd.html)
+
+Ubuntu
+
+        sudo apt-get install apache2 -y
+
+Amazon Linux
+
+        sudo yum install httpd -y
+
+### [XVFB](http://www.x.org/archive/X11R7.6/doc/man/man1/Xvfb.1.xhtml)
+
+Ubuntu
+
+        sudo apt-get install xvfb -y
+
+Amazon Linux
+
+        sudo yum install xorg-x11-server-Xvfb -y
+
+### [Selenium](http://www.seleniumhq.org)
+
+        mkdir selenium-server && cd selenium-server && \
         wget "https://selenium.googlecode.com/files/selenium-server-standalone-2.47.1.jar" && \
-        cd && \
-        sudo apt-get install firefox && \
+        cd
+
+### [Firefox](https://support.mozilla.org/si/kb/Linux%20මත%20ෆයර්ෆොක්ස්%20ස්ථාපනය)
+
+Ubuntu
+
+        sudo apt-get install firefox -y
+
+Amzon Linux (Takes a while; comment out line 69 if required)
+
+        wget https://gist.githubusercontent.com/joekiller/4144838/raw/ffd5fabce7083eca65c61033ea90e51b4be6ba55/gtk-firefox.sh
+        chmod +x gtk-firefox.sh
+        sudo ./gtk-firefox.sh
+
+### [Chrome (Driver)](https://code.google.com/p/selenium/wiki/ChromeDriver)
+
+Ubuntu
+
         wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - && \
         sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' && \
-        sudo apt-get update && \
-        sudo apt-get install google-chrome-stable && \
+        sudo apt-get update -y && \
+        sudo apt-get install google-chrome-stable -y && \
         wget http://chromedriver.storage.googleapis.com/2.19/chromedriver_linux32.zip && \
-        sudo apt-get install unzip && \
+        sudo apt-get install unzip -y && \
         unzip chromedriver_linux*.zip && \
         rm chromedriver_linux*.zip && \
         sudo mv chromedriver /usr/local/bin
 
-* Red Hat
-
-        cd && \
-        sudo yum update && \
-        su -c "yum install java-1.8.0-openjdk" && \
-        sudo yum install httpd && \
-        sudo yum install xorg-x11-server-Xvfb && \
-        mkdir selenium-server && cd selenium-server
-        wget "https://selenium.googlecode.com/files/selenium-server-standalone-2.47.1.jar" && \
-        cd && \
-        sudo yum install firefox && \
-        cat << EOF > /etc/yum.repos.d/google-chrome.repo
-        [google-chrome]
-        name=google-chrome - \$basearch
-        baseurl=http://dl.google.com/linux/chrome/rpm/stable/\$basearch
-        enabled=1
-        gpgcheck=1
-        gpgkey=https://dl-ssl.google.com/linux/linux_signing_key.pub
-        EOF
-        yum install google-chrome-stable
-        wget http://chromedriver.storage.googleapis.com/2.19/chromedriver_linux32.zip && \
-        unzip chromedriver_linux*.zip && \
-        rm chromedriver_linux*.zip && \
-        sudo mv chromedriver /usr/local/bin
-
-Launch XVFB and Selenium
-------------------------
+Launch Apache, XVFB and Selenium
+--------------------------------
 
 * Ubuntu
 
+        sudo /etc/init.d/apache2 restart
         nohup Xvfb :0 -screen 0 1024x768x24 2>&1 >/dev/null &
         export DISPLAY=:0
         nohup java -jar ~/selenium-server/selenium-server-standalone-2.47.1.jar & > selenium.log &
 
-* Red Hat
+* Amazon Linux
 
+        sudo /sbin/service httpd restart
         rm nohup.out
         nohup Xvfb :1 -screen 0 1024x768x24 & >/dev/null
         # if you have issues, sudo rm /usr/local/lib/libpixman-1.so.0
