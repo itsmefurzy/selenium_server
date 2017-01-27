@@ -63,7 +63,7 @@ Amazon Linux
 ### [Selenium](http://www.seleniumhq.org)
 
         mkdir selenium-server && cd selenium-server && \
-        wget "https://selenium.googlecode.com/files/selenium-server-standalone-2.47.1.jar" && \
+        wget "wget https://goo.gl/Lyo36k -O selenium-server-standalone.jar" && \
         cd
 
 ### [Firefox](https://support.mozilla.org/si/kb/Linux%20මත%20ෆයර්ෆොක්ස්%20ස්ථාපනය)
@@ -100,7 +100,7 @@ Launch Apache, XVFB and Selenium
         sudo /etc/init.d/apache2 restart
         nohup Xvfb :0 -screen 0 1024x768x24 2>&1 >/dev/null &
         export DISPLAY=:0
-        nohup java -jar ~/selenium-server/selenium-server-standalone-2.47.1.jar & > selenium.log &
+        nohup java -jar ~/selenium-server/selenium-server-standalone*.jar & > selenium.log &
 
 * Amazon Linux
 
